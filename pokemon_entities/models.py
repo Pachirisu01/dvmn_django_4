@@ -13,3 +13,9 @@ class Pokemon(models.Model):
     )
     def __str__(self):
         return f'{self.title}'
+
+class PokemonEntity(models.Model):
+    longitude = models.FloatField(verbose_name='Lon')
+    latitude = models.FloatField(verbose_name='Lat')
+    def __str__(self):
+        return f'{self.name} ({self.latitude:.4f}, {self.longitude:.4f})'
