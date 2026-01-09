@@ -15,6 +15,11 @@ class Pokemon(models.Model):
         return f'{self.title}'
 
 class PokemonEntity(models.Model):
+    subject = models.ForeignKey(
+        Pokemon,
+        null=True,
+        verbose_name='Pokemon',
+        on_delete=models.CASCADE)
     longitude = models.FloatField(verbose_name='Lon')
     latitude = models.FloatField(verbose_name='Lat')
     def __str__(self):
