@@ -1,5 +1,6 @@
 import folium
 import json
+from django.utils.timezone import localtime
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
@@ -30,7 +31,14 @@ def show_all_pokemons(request):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
-    entities = PokemonEntity.objects.select_related('subject').all()
+    now = localtime()
+
+    entities = PokemonEntity.objects.select_related('subject').filter(
+        appeared_at__lte=now,
+        disappeared_at__gte=now
+    )
+
+
 
     for entity in entities:
         pokemon = entity.subject
