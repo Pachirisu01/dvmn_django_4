@@ -81,7 +81,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    
+
     pokemon = get_object_or_404(Pokemon, id=pokemon_id)
 
     entities = PokemonEntity.objects.filter(subject=pokemon)
@@ -106,9 +106,9 @@ def show_pokemon(request, pokemon_id):
 
     pokemon_data = {
         'pokemon_id': pokemon.id,
-        'title_ru': pokemon.title,   
+        'title_ru': pokemon.title,
         'img_url': img_final,
-        'description': '',
+        'description': pokemon.description,
     }
 
     return render(request, 'pokemon.html', context={

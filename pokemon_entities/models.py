@@ -11,6 +11,9 @@ class Pokemon(models.Model):
         null=True,
         blank=True,
     )
+    id = models.BigAutoField(primary_key=True)
+    img_url = models.URLField(null=True,blank=True)
+    description = models.TextField(verbose_name='Description',null=True,blank=True)
     def __str__(self):
         return f'{self.title}'
 
@@ -30,4 +33,4 @@ class PokemonEntity(models.Model):
     pokemon_def = models.IntegerField(verbose_name='Defence', null=True)
     pokemon_stam = models.IntegerField(verbose_name='Stamina', null=True)
     def __str__(self):
-        return f'{self.name} ({self.latitude:.4f}, {self.longitude:.4f})'
+        return f'{self.subject.title} ({self.latitude:.4f}, {self.longitude:.4f})'
