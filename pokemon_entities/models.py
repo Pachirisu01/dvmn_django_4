@@ -3,29 +3,41 @@ from django.db import models
 class Pokemon(models.Model):
     title = models.CharField(
         max_length=200,
-        verbose_name='Pokemon name',
+        verbose_name='Название Покемона',
     )
     title_en = models.CharField(
         max_length=200,
-        verbose_name='English name',
+        verbose_name='Английское название',
         blank=True,
         null=True,
     )
     title_jp = models.CharField(
         max_length=200,
-        verbose_name='Japanese name',
+        verbose_name='Японское название',
         blank=True,
         null=True,
     )
     pokemon_image = models.ImageField(
         upload_to='media',
-        verbose_name='Images',
+        verbose_name='Картинка',
         null=True,
         blank=True,
     )
     id = models.BigAutoField(primary_key=True)
-    img_url = models.URLField(null=True,blank=True)
+    img_url = models.URLField(
+        verbose_name='URL картинки',
+        null=True,
+        blank=True)
     description = models.TextField(verbose_name='Description',null=True,blank=True)
+    evolution_from = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='evolutions',
+        verbose_name='Из кого эволюционировал')
+
+
     def __str__(self):
         return f'{self.title}'
 
@@ -33,16 +45,16 @@ class PokemonEntity(models.Model):
     subject = models.ForeignKey(
         Pokemon,
         null=True,
-        verbose_name='Pokemon',
+        verbose_name='Покемон',
         on_delete=models.CASCADE)
-    longitude = models.FloatField(verbose_name='Lon')
-    latitude = models.FloatField(verbose_name='Lat')
-    appeared_at = models.DateTimeField(verbose_name='Appeared at', null=True)
-    disappeared_at = models.DateTimeField(verbose_name='Disappeared at', null=True)
-    pokemon_lvl = models.IntegerField(verbose_name='Level', null=True)
-    pokemon_hlth = models.IntegerField(verbose_name='Health', null=True)
-    pokemon_strength = models.IntegerField(verbose_name='Strength', null=True)
-    pokemon_def = models.IntegerField(verbose_name='Defence', null=True)
-    pokemon_stam = models.IntegerField(verbose_name='Stamina', null=True)
+    longitude = models.FloatField(verbose_name='Долгота')
+    latitude = models.FloatField(verbose_name='Широта')
+    appeared_at = models.DateTimeField(verbose_name='Появится', null=True)
+    disappeared_at = models.DateTimeField(verbose_name='Исчезнет', null=True)
+    pokemon_lvl = models.IntegerField(verbose_name='Уровень', null=True)
+    pokemon_hlth = models.IntegerField(verbose_name='Здоровье', null=True)
+    pokemon_strength = models.IntegerField(verbose_name='Сила', null=True)
+    pokemon_def = models.IntegerField(verbose_name='Защита', null=True)
+    pokemon_stam = models.IntegerField(verbose_name='Выносливость', null=True)
     def __str__(self):
         return f'{self.subject.title} ({self.latitude:.4f}, {self.longitude:.4f})'
