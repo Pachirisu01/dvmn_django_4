@@ -21,8 +21,7 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     )
     folium.Marker(
         [lat, lon],
-        # Warning! `tooltip` attribute is disabled intentionally
-        # to fix strange folium cyrillic encoding bug
+
         icon=icon,
     ).add_to(folium_map)
 
@@ -125,6 +124,17 @@ def show_pokemon(request, pokemon_id):
         pokemon_data['previous_evolution'] = prev_data
     else:
         pokemon_data['previous_evolution'] = None
+
+    next_pokemon = pokemon.evolutions.first()
+    if next_pokemon:
+        pokemon_data['next_evolution'] = {
+            'title_ru': next_pokemon.title,
+            'pokemon_id': next_pokemon.id,
+            'img_url': get_pokemon_image_url(next_pokemon),
+            'url': f'/pokemon/{next_pokemon.id}/',
+        }
+    else:
+        pokemon_data['next_evolution'] = None
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
