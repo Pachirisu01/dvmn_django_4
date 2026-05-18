@@ -84,6 +84,13 @@ def show_pokemon(request, pokemon_id):
 
     pokemon = get_object_or_404(Pokemon, id=pokemon_id)
 
+    def get_pokemon_image_url(p):
+        if p.pokemon_image and hasattr(p.pokemon_image, 'url'):
+            return request.build_absolute_uri(p.pokemon_image.url)
+        elif p.img_url:
+            return p.img_url
+        return DEFAULT_IMAGE_URL
+
     entities = PokemonEntity.objects.filter(subject=pokemon)
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
@@ -98,20 +105,26 @@ def show_pokemon(request, pokemon_id):
 
         add_pokemon(folium_map, entity.latitude, entity.longitude, image_url)
 
-    img_final = (
-        request.build_absolute_uri(pokemon.pokemon_image.url)
-        if pokemon.pokemon_image and hasattr(pokemon.pokemon_image, 'url')
-        else (pokemon.img_url or DEFAULT_IMAGE_URL)
-    )
 
     pokemon_data = {
         'pokemon_id': pokemon.id,
         'title_ru': pokemon.title,
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
-        'img_url': img_final,
         'description': pokemon.description,
+        'img_url': get_pokemon_image_url(pokemon)
     }
+
+    if pokemon.evolution_from:
+        prev = pokemon.evolution_from
+        prev_data = {
+            'title_ru': prev.title,
+            'pokemon_id': prev.id,
+            'img_url': get_pokemon_image_url(prev),
+        }
+        pokemon_data['previous_evolution'] = prev_data
+    else:
+        pokemon_data['previous_evolution'] = None
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
