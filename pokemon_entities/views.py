@@ -21,7 +21,8 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     )
     folium.Marker(
         [lat, lon],
-
+        # Warning! `tooltip` attribute is disabled intentionally
+        # to fix strange folium cyrillic encoding bug
         icon=icon,
     ).add_to(folium_map)
 
@@ -60,8 +61,8 @@ def show_all_pokemons(request):
     all_pokemons = Pokemon.objects.all()
 
     for pokemon in all_pokemons:
-        if pokemon.pokemon_image and hasattr(pokemon.pokemon_image, 'url'):
-            img_url = request.build_absolute_uri(pokemon.pokemon_image.url)
+        if pokemon.image and hasattr(pokemon.image, 'url'):
+            img_url = request.build_absolute_uri(pokemon.image.url)
         elif pokemon.img_url:
             img_url = pokemon.img_url
         else:
@@ -84,8 +85,8 @@ def show_pokemon(request, pokemon_id):
     pokemon = get_object_or_404(Pokemon, id=pokemon_id)
 
     def get_pokemon_image_url(p):
-        if p.pokemon_image and hasattr(p.pokemon_image, 'url'):
-            return request.build_absolute_uri(p.pokemon_image.url)
+        if p.image and hasattr(p.image, 'url'):
+            return request.build_absolute_uri(p.image.url)
         elif p.img_url:
             return p.img_url
         return DEFAULT_IMAGE_URL
@@ -95,8 +96,8 @@ def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
     for entity in entities:
-        if pokemon.pokemon_image and hasattr(pokemon.pokemon_image, 'url'):
-            image_url = request.build_absolute_uri(pokemon.pokemon_image.url)
+        if pokemon.image and hasattr(pokemon.image, 'url'):
+            image_url = request.build_absolute_uri(pokemon.image.url)
         elif pokemon.img_url:
             image_url = pokemon.img_url
         else:

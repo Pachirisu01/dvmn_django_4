@@ -17,7 +17,7 @@ class Pokemon(models.Model):
         blank=True,
         null=True,
     )
-    pokemon_image = models.ImageField(
+    image = models.ImageField(
         upload_to='pokemon_image',
         verbose_name='Картинка',
         null=True,
