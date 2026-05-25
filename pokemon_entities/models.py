@@ -23,7 +23,6 @@ class Pokemon(models.Model):
         null=True,
         blank=True,
     )
-    id = models.BigAutoField(primary_key=True)
     img_url = models.URLField(
         verbose_name='URL картинки',
         null=True,
