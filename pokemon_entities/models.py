@@ -9,12 +9,10 @@ class Pokemon(models.Model):
         max_length=200,
         verbose_name='Английское название',
         blank=True,
-        null=True,
     )
     title_jp = models.CharField(
         max_length=200,
         verbose_name='Японское название',
-        blank=True,
         null=True,
     )
     image = models.ImageField(
@@ -29,7 +27,6 @@ class Pokemon(models.Model):
         blank=True)
     description = models.TextField(
         verbose_name='Description',
-        null=True,
         blank=True)
     evolution_from = models.ForeignKey(
         'self',
@@ -42,6 +39,7 @@ class Pokemon(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
 
 class PokemonEntity(models.Model):
     subject = models.ForeignKey(
