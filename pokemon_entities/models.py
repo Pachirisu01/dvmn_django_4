@@ -26,7 +26,7 @@ class Pokemon(models.Model):
         null=True,
         blank=True)
     description = models.TextField(
-        verbose_name='Description',
+        verbose_name='Описание',
         blank=True)
     evolution_from = models.ForeignKey(
         'self',
